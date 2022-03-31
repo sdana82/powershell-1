@@ -3,9 +3,9 @@ Clear-Host
 
 $ErrorActionPreference = 'Stop'
 $VerbosePreference = 'Continue'
-$userName = "ctadmin"
+$userName = ""
 $objLocalAdminAccount = $null
-$Password = ConvertTo-SecureString "L@m38!rd" -asplaintext -force
+$Password = ConvertTo-SecureString "" -asplaintext -force
 
 Try {
     Write-Verbose "Searching for $($USERNAME) in LocalUser DataBase"
@@ -60,11 +60,11 @@ New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Win
 New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsBackup" -Name DisableMonitoring -Value 1 -PropertyType DWORD -Force | Out-Null
 
 # Enable Remote Desktop
-Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\" -Name ìfDenyTSConnectionsî -Value 0 -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\" -Name ‚ÄúfDenyTSConnections‚Äù -Value 0 -Force | Out-Null
 # Disable NLA
-Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"  -Name ìUserAuthenticationî -Value 0 -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"  -Name ‚ÄúUserAuthentication‚Äù -Value 0 -Force | Out-Null
 # Set Firewall Rule to allow RDP access
-Enable-NetFirewallRule -DisplayGroup ìRemote Desktopî
+Enable-NetFirewallRule -DisplayGroup ‚ÄúRemote Desktop‚Äù
 
 # Power Settings
 ## Disable Hibernate
@@ -125,7 +125,7 @@ New-Item -Path HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows -Nam
 New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds" -Name EnableFeeds -Value 0 -PropertyType DWORD -Force | Out-Null
 
 # Disable Automatic Device Installation
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" -Name ìPreventDeviceMetadataFromNetworkî -Value 1 | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" -Name ‚ÄúPreventDeviceMetadataFromNetwork‚Äù -Value 1 | Out-Null
 
 # Create the CT-Installers dir
 $dir = "C:\CT-Installers"
