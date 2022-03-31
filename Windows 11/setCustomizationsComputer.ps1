@@ -6,10 +6,10 @@
 $installerDir = "C:\CT-Installers"
 
 # Local admin user creation info
-$userName = "ctadmin"
-$fullName = "Cetra Administrator"
-$userDescription = "Cetra Technology administrative account."
-$Password = ConvertTo-SecureString "L@m38!rd" -AsPlainText -Force
+$userName = ""
+$fullName = ""
+$userDescription = ""
+$Password = ConvertTo-SecureString "" -AsPlainText -Force
 $checkForUser = (Get-LocalUser).Name -contains $userName
 $checkLocalAdminGroup = (Get-LocalGroupMember -Group Administrators).Name -contains $env:COMPUTERNAME + "\" + $userName
 $checkLocalUserGroup = (Get-LocalGroupMember -Group Users).Name -contains  $env:COMPUTERNAME + "\" + $userName
