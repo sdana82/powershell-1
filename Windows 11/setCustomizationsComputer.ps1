@@ -6,16 +6,16 @@
 $installerDir = "C:\CT-Installers"
 
 # Local admin user creation info
-$userName = ""
-$fullName = ""
-$userDescription = ""
-$Password = ConvertTo-SecureString "" -AsPlainText -Force
+$userName = "ctadmin"
+$userFullName = "Cetra Administrator"
+$userDescription = "Cetra Technology administrative account."
+$Password = ConvertTo-SecureString "L@m38!rd" -AsPlainText -Force
 $checkForUser = (Get-LocalUser).Name -contains $userName
 $checkLocalAdminGroup = (Get-LocalGroupMember -Group Administrators).Name -contains $env:COMPUTERNAME + "\" + $userName
 $checkLocalUserGroup = (Get-LocalGroupMember -Group Users).Name -contains  $env:COMPUTERNAME + "\" + $userName
 
 # Start menu items
-$configStartPins = '{ "pinnedList": [ {"desktopAppId":"Microsoft.Windows.Explorer"},{"desktopAppId":"Microsoft.Windows.ControlPanel"},{"packagedAppId":"Microsoft.WindowsTerminal_8wekyb3d8bbwe!App"},{"desktopAppId":"Microsoft.Windows.Shell.RunDialog"}, {"packageAppId":"windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"} ] }'
+$configStartPins = '{ "pinnedList": [ {"desktopAppId":"Microsoft.Windows.Explorer"},{"desktopAppId":"Microsoft.Windows.ControlPanel"},{"packagedAppId":"Microsoft.WindowsTerminal_8wekyb3d8bbwe!App"},{"desktopAppId":"Microsoft.Windows.Shell.RunDialog"}, {"packagedAppId":"windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"} ] }'
 $configStartPins_ProviderSet = 1
 $configStartPins_WinningProvider = "B5292708-1619-419B-9923-E5D9F3925E71"
 
@@ -23,7 +23,7 @@ $configStartPins_WinningProvider = "B5292708-1619-419B-9923-E5D9F3925E71"
 if ($checkForUser -eq $false) {
     Write-Host "$userName does not exist"
     Write-Host "Creating User $userName"
-    New-LocalUser -Name "ctadmin" -FullName "Cetra Administrator" -Description "Cetra Technology administrative account." -Password $Password -PasswordNeverExpires:$true -UserMayNotChangePassword:$true
+    New-LocalUser -Name $userName -FullName $userFullName -Description $userDescription -Password $Password -PasswordNeverExpires:$true -UserMayNotChangePassword:$true
     Add-LocalGroupMember -Group Administrators $userName
     net user $userName /Passwordreq:yes
 } ElseIf ($checkForUser -eq $true) {
