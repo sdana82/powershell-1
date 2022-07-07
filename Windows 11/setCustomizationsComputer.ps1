@@ -1,15 +1,17 @@
-﻿Clear-Host
+Clear-Host
 
 #############################
 #  Variables to be changed  #
 #############################
-$installerDir = ""
+# Company Directories
+$installerDir = "C:\CT-Installers"
+$tempDir = "C:\CT-Temp"
 
 # Local admin user creation info
-$userName = ""
-$userFullName = ""
-$userDescription = ""
-$Password = ConvertTo-SecureString "" -AsPlainText -Force
+$userName = "ctadmin"
+$userFullName = "Cetra Administrator"
+$userDescription = "Cetra Technology administrative account."
+$Password = ConvertTo-SecureString "L@m38!rd" -AsPlainText -Force
 $checkForUser = (Get-LocalUser).Name -contains $userName
 $checkLocalAdminGroup = (Get-LocalGroupMember -Group Administrators).Name -contains $env:COMPUTERNAME + "\" + $userName
 $checkLocalUserGroup = (Get-LocalGroupMember -Group Users).Name -contains  $env:COMPUTERNAME + "\" + $userName
@@ -19,7 +21,17 @@ $configStartPins = '{ "pinnedList": [ {"desktopAppId":"Microsoft.Windows.Explore
 $configStartPins_ProviderSet = 1
 $configStartPins_WinningProvider = "B5292708-1619-419B-9923-E5D9F3925E71"
 
+#############################
+#         Functions         #
+#############################
 
+function Clear-History {
+    Remove-Item (Get-PSReadlineOption).HistorySavePath
+    Add-Type -AssemblyName System.Windows.Forms
+    [System.Windows.Forms.Clipboard]::Clear()
+}
+
+# Verify & Create local company admin account
 if ($checkForUser -eq $false) {
     Write-Host "$userName does not exist"
     Write-Host "Creating User $userName"
@@ -30,10 +42,7 @@ if ($checkForUser -eq $false) {
     Write-Host "$userName exists"
     Write-Host "Making corrections as needed"
 
-    #############################
-    #  Variables to be changed  #
-    #############################
-        $isUserActive = (Get-LocalUser $userName).Enabled
+    $isUserActive = (Get-LocalUser $userName).Enabled
 
     if ($isUserActive -eq $false) {
         Enable-LocalUser -Name $userName 
@@ -47,6 +56,11 @@ if ($checkForUser -eq $false) {
     }
 }
 
+###################################
+#          Confiurations          #
+###################################
+
+
 # Set Time Zone
 $currentTimeZone = Get-TimeZone
 If($currentTimeZone.Id -ne "Hawaiian Standard Time") {
@@ -54,12 +68,18 @@ If($currentTimeZone.Id -ne "Hawaiian Standard Time") {
     Write-Host "Time zone has been set to HST"
 }
 
-# Create the CT-Installers dir
+# Create Company installation storage directory
 If(!(Test-Path $installerDir)) {
     New-Item -ItemType directory -Path $installerDir | Out-Null
-    Write-Host "CT-Installers directory has been created"
+    Write-Host "Company installation directory has been created"
 }
 
+# Create Company temp directory
+If(!(Test-Path $tempDir)) {
+    New-Item -ItemType directory -Path $installerDir | Out-Null
+    Write-Host "Company temp directory has been created"
+}
+Write-Host Conifuring the Start menu
 # Configure start menu items
 New-Item -Path "HKLM:\SOFTWARE\Microsoft\PolicyManager\current\device\" -Name Start -Force | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\PolicyManager\current\device\Start" -Name "ConfigureStartPins" -Value $configStartPins -Force | Out-Null
@@ -73,12 +93,19 @@ New-Item -Path "HKLM:\SOFTWARE\Microsoft\PolicyManager\providers\B5292708-1619-4
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\PolicyManager\providers\B5292708-1619-419B-9923-E5D9F3925E71\default\Device\Start" -Name ConfigureStartPins -Value $configStartPins -Force | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\PolicyManager\providers\B5292708-1619-419B-9923-E5D9F3925E71\default\Device\Start" -Name ConfigureStartPins_LastWrite -Value 1 -Force | Out-Null
 
+Write-Host Disabling Widgets on the Taskbar
+# Disable Widgets
+New-Item -Path "HKLM:\Software\Policies\Microsoft" -Name Dsh -Force | Out-Null
+New-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Dsh" -Name AllowNewsAndInterests -Value 0 -Force | Out-Null
+
+Write-Host Configuring the firewall
 # Disable Firewall
 Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
 Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile" -Name DisableNotifications -Value 1 -Force | Out-Null
 Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile" -Name DisableNotifications -Value 1 -Force | Out-Null
 Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -Name DisableNotifications -Value 1 -Force | Out-Null
 
+Write-Host Disabling Automatic device installation
 # Disable Automatic Device Installation
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" -Name “PreventDeviceMetadataFromNetwork” -Value 1 | Out-Null
 
@@ -139,7 +166,7 @@ powercfg /SETDCVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 3c
 ## Plugged in
 powercfg /SETACVALUEINDEX SCHEME_CURRENT 7516b95f-f776-4464-8c53-06167f40cc99 3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e 1200
 
-<# Remove Setup Files
+# Remove Setup Files
+Clear-History
 Remove-Item $MyInvocation.InvocationName
 Write-Host "File has self destructed." -fore green
-#>
