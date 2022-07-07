@@ -1,0 +1,24 @@
+# Possible errors
+# Get-RemoteAccessConnectionStatistics : Inbox accounting should be enabled for the cmdlet to succeed.
+# Set-RemoteAccessAccounting -EnableAccountingType Inbox -ComputerName <rrasServerName> -PassThru
+
+# View all properties
+Get-RemoteAccessConnectionStatistics
+Get-RemoteAccessConnectionStatistics | Format-List -Property *
+
+$startDate = Get-Date -Date "01/17/2022"
+$endDate = Get-Date -Date "01/25/2022"
+Get-RemoteAccessConnectionStatistics -StartDateTime $startDate -EndDateTime $endDate | Export-Csv C:\CT-Temp\rrasAudit-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+Get-RemoteAccessConnectionStatistics -StartDateTime $startDate -EndDateTime $endDate | Out-GridView
+
+
+
+# Allison
+Get-RemoteAccessUserActivity -StartDateTime "1 January 2022 00:00:00" -EndDateTime "28 January 2022 00:00:00"  -UserName  HIBKLAW\csouza
+
+Get-RemoteAccessConnectionStatistics -StartDateTime "28 January 2022 00:00:00" | Where-Object {$_.UserName -Like "*csouza*" }
+
+Get-RemoteAccessConnectionStatistics -StartDateTime "28 January 2022 00:00:00" | Where-Object {$_.UserName -Like "*csouza*" } | Out-GridView
+Get-RemoteAccessConnectionStatistics -StartDateTime "28 January 2022 00:00:00" | Where-Object {$_.UserName -Like "*csouza*" } | Export-Csv C:\CT-Temp\rrasAudit-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+
+Get-RemoteAccessConnectionStatistics -StartDateTime "28 January 2022 00:00:00" | Where-Object {$_.UserName -Like "*csouza*" } | Select UserName, ConnectionDuration, ConnectionStartTime  | Export-Csv C:\CT-Temp\rrasAudit-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv -NoTypeInformation

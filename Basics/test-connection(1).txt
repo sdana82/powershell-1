@@ -1,0 +1,17 @@
+﻿# Reads IPList.txt and does a quick ping test
+# Outputs to screen
+# All files need to be in the same directory as the script
+
+Get-Content .\IPList.txt | ForEach-Object {
+   if(Test-Connection -ComputerName $_ -Quiet -Count 1) {  
+        New-Object -TypeName PSCustomObject -Property @{
+           ServerName = $_
+           'Ping Status' = 'Ok'
+       }
+   } else {
+       New-Object -TypeName PSCustomObject -Property @{
+           ServerName = $_
+           'Ping Status' = 'Failed'
+      }
+    }
+}

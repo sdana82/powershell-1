@@ -1,0 +1,8 @@
+Get-AppxPackage | Select Name, PackageFullName | Sort-Object -Property Name | Export-Csv C:\CT-Temp\get-appxPackage.csv
+
+Get-AppxPackage -AllUsers | Select Name, PackageFullName | Sort Name | Export-Csv C:\CT-Temp\appxPackageList.csv
+
+Get-AppxPackage *<appName>* | Select PackageFullName
+
+# Remove package
+Get-AppxPackage *<appName>* | Remove-AppxPackage

@@ -1,0 +1,61 @@
+$interFaceIndex = (Get-NetAdapter | Select InterfaceIndex | ft -HideTableHeaders | Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("<ipAddressOfPDC>")
+Add-Computer –DomainName <domain.tld> -Credential <domain>\ctadmin -restart –force
+
+# CCH (on site)
+## Pali Momi
+Add-Computer -DomainName TCCOH.LOCAL -Credential TCCOH\ctadmin -OUPath "OU=Pali_Momi,DC=TCCOH,DC=LOCAL" -Restart -Force
+Add-Computer -DomainName TCCOH.LOCAL -Credential TCCOH\ctadmin -OUPath "OU=examRooms,OU=Pali_Momi,DC=TCCOH,DC=LOCAL" -Restart -Force
+## Liliha
+Add-Computer -DomainName TCCOH.LOCAL -Credential TCCOH\ctadmin -OUPath "OU=Liliha,DC=TCCOH,DC=LOCAL" -Restart -Force
+Add-Computer -DomainName TCCOH.LOCAL -Credential TCCOH\ctadmin -OUPath "OU=varianEclipseWorkstation,OU=Liliha,DC=TCCOH,DC=LOCAL" -Restart -Force
+## PRO
+Add-Computer -DomainName TCCOH.LOCAL -Credential TCCOH\ctadmin -OUPath "OU=PRO_Computers,DC=TCCOH,DC=LOCAL" -Restart -Force
+
+# CCH from CTO
+$pdc = "10.1.1.51"
+$getDC = (Test-NetConnection $pdc).PingSucceeded
+
+if ($getDC -eq "True") {
+    $interfaceIndex = (Get-NetAdapter | Where { ($_.Status -eq "Up") } | Select InterfaceIndex | FT -HideTableHeaders |  Out-String).trim()
+    set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("10.1.1.51")
+    Add-Computer –DomainName TCCOH.LOCAL -Credential TCCOH\ctadmin -Restart -Force
+} else {
+    Write-Host "Unable to reach the PDC IP of $pdc"
+    Write-Host "Please check your connection an try again"
+}
+
+# Aloha Security (from tunnel)
+$interfaceIndex = (Get-NetAdapter | Where { ($_.Status -eq "Up") } | Select InterfaceIndex | FT -HideTableHeaders |  Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("172.16.0.51")
+Add-Computer –DomainName ASIC.LOCAL -Credential ASIC\ctadmin -restart –force
+
+# CommPac
+$interfaceIndex = (Get-NetAdapter | Where { ($_.Status -eq "Up") } | Select InterfaceIndex | FT -HideTableHeaders |  Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("10.204.26.51")
+Add-Computer –DomainName AD.COMMPAC.COM -Credential ASIC\ctadmin -restart –force
+
+# GTI
+## Wi Fi
+$interFaceIndex = (Get-NetAdapter -Name "Wi-Fi" | Select InterfaceIndex | ft -HideTableHeaders | Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("192.168.1.51")
+Test-NetConnection
+Add-Computer –DomainName GTRANSPORT.LOCAL -Credential GTRANSPORT\ctadmin -restart –force
+
+## Ethernet
+$interFaceIndex = (Get-NetAdapter | Select InterfaceIndex | ft -HideTableHeaders | Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("192.168.1.51")
+Add-Computer –DomainName GTRANSPORT.LOCAL -Credential GTRANSPORT\ctadmin -restart –force
+
+
+# Watanabe (from tunnel)
+$interFaceIndex = (Get-NetAdapter | Select InterfaceIndex | ft -HideTableHeaders | Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("10.10.75.51")
+Add-Computer –DomainName wikk-bishop.wik.com -Credential wikk-bishop.wik.com\ctadmin -restart –force
+
+# Reset the DNS back to DHCP
+$interFaceIndex = (Get-NetAdapter | Select InterfaceIndex | ft -HideTableHeaders | Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interFaceIndex -ResetServerAddresses
+
+$interFaceIndex = (Get-NetAdapter -Name "Wi-Fi" | Select InterfaceIndex | ft -HideTableHeaders | Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interFaceIndex -ResetServerAddresses

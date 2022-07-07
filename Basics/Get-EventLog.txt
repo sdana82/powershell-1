@@ -1,0 +1,4 @@
+# Run Elevated
+# Finds event ID 4740 (Account Lockout)
+Get-EventLog -LogName Security -InstanceID 4740 -Newest 1
+Get-EventLog -LogName Security -InstanceID 4740 -Newest 1 | Format-List

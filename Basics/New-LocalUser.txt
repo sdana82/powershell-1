@@ -1,0 +1,9 @@
+$Password = Read-Host -AsSecureString
+<enterPassword>
+New-LocalUser -Name "<userName>" -FullName "<fullName>" -Description "<description>" -Password $Password -PasswordNeverExpires -UserMayNotChangePassword
+
+# First line is for the password
+# Second line is to add the suer
+# you need to add the user to the local groups
+$Password = Read-Host -AsSecureString
+New-LocalUser -Name "ctadmin" -FullName "Cetra Administrator" -Description "Cetra Technology administrative account." -Password $Password -PasswordNeverExpires -UserMayNotChangePassword

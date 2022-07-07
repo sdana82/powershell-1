@@ -1,0 +1,15 @@
+# Usage
+Get-History
+
+# Examples
+# Get-History -Count ($)
+
+# Show Last 5 commands
+Get-History -Count 5
+
+# Show last 5 commands inlude ID, Command, Start Execution Time, End Execution time
+Get-History -Count 5 |fl
+
+
+# Show last 5 commands where command includes
+Get-History | Where-Object {$_.CommandLine -like "*Get-MailboxExport*"} |fl

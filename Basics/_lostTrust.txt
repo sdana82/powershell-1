@@ -1,0 +1,12 @@
+From CMD, run: nltest /sc_reset:domain\DCName
+
+From PowerShell, run: Test-ComputerSecureChannel -Verbose -Repair -Credential domain\username
+
+
+# Test the Trust
+Test-ComputerSecureChannel -Verbose
+
+# The the trust is bad (False) Then run
+# Test-ComputerSecureChannel -Verbose -Repair -Credential <DOMAIN>\ctadmin
+
+Test-ComputerSecureChannel -Verbose -Repair -Credential TCCOH\ctadmin

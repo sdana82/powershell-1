@@ -1,0 +1,20 @@
+#Basic UserInfo
+Get-ADUser <usernName> -Properties whencreated, whenchanged, modified
+
+
+Get-ADUser -Filter * -SearchBase “CN=Users,dc=ad,dc=rengopackaging,dc=com” -ResultSetSize 5000 -properties passwordlastset, lastlogondate | Sort-Object -property Name -Descending | Select Name,SamAccountName,Enabled,LastLogonDate,PasswordLastSet | Export-Csv C:\CT-Temp\Userlist-2017-05-04.csv
+
+Get-ADUser -Filter * -SearchBase “CN=Users,dc=tccoh,dc=local” -ResultSetSize 5000 -properties passwordlastset, lastlogondate | Sort-Object -property Name -Descending | Select Name,SamAccountName,Enabled,LastLogonDate,PasswordLastSet | Export-Csv C:\CT-Temp\Userlist-2018-05-02.csv
+
+
+
+#  
+#  If you receive the error:
+#  The term 'Get-ADUser' is not recognized as the name of a cmdlet
+#  
+#  Run the below commands
+#  
+#  
+
+Import-Module activedirectory
+Get-Module -listavailable

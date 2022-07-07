@@ -1,0 +1,4 @@
+Search-ADAccount -LockedOut
+
+# Note: This will likely unlock all locked AD Accounts
+Search-ADAccount -LockedOut | Unlock-ADAccount

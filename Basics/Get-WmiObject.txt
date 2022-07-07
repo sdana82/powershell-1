@@ -1,0 +1,7 @@
+# Get mapped Drives
+
+Get-WmiObject Win32_MappedLogicalDisk -computer <computerName> | select name, providername
+
+# Get Bios Serial Number
+
+Get-WmiObject win32_bios | select Serialnumber

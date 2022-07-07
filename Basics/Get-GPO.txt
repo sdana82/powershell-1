@@ -1,0 +1,23 @@
+# Usage:
+
+Get-GPO
+
+# You will be asked for the GUID
+(GPO Folder Name)
+
+# Lists all Group Policies
+Get-GPO -All
+Get-GPO -All | Select DisplayName, ID
+
+
+
+
+# Error:
+# The term 'Get-GPO' is not recognized as the name of a cmdlet, function
+
+# Resolution
+Import-Module -Name GroupPolicy
+Get-Module -ListAvailable
+
+
+get-gpo -all | select Displayname,Description

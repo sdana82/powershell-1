@@ -1,0 +1,6 @@
+$remoteHost = "CT-PC004"
+Enter-PSSession $remoteHost -Credential CETRA\ctadmin
+Set-ExecutionPolicy RemoteSigned
+C:\CT-Temp\catFactsDeploy.ps1
+Get-PSSession | Remove-PSSession
+Exit

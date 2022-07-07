@@ -1,0 +1,8 @@
+
+pnputil.exe -i -a "\\pathToDriver\KonicaDriver\win_x64\KOBS4J__.inf"
+
+Add-PrinterDriver -Name "KONICA MINOLTA Universal PCL"
+
+Add-PrinterPort -Name "192.168.1.1" -PrinterHostAddress 192.168.1.1
+
+Add-Printer -PortName "192.168.1.1" -DriverName "KONICA MINOLTA Universal PCL" -Name "My Office Printer"

@@ -1,0 +1,13 @@
+# Only in Win8/Server2k12 or higher
+
+# Command
+# Resolve-DnsName <domain.tld> -Type txt -Server <dnsServerIP> | ? {$_.Strings -like "v=spf1*"}
+# Resolve-DnsName <domain.tld> -Type MX -Server <dnsServerIP>
+# Resolve-DnsName <domain.tld> -Type NS -Server <dnsServerIP>
+
+# Working Samples
+Resolve-DnsName MWGROUP.COM -Type txt -Server 8.8.8.8 | ? {$_.Strings -like "v=spf1*"}
+Resolve-DnsName CETRATECHNOLOGY.COM -Type MX -Server 8.8.8.8
+Resolve-DnsName CETRATECHNOLOGY.COM -Type NS -Server 8.8.8.8
+Resolve-DnsName REMOTE.ACMSHEALTH.ORG -Type A -Server 8.8.8.8
+

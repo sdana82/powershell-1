@@ -1,0 +1,5 @@
+Get-ADGroup -Identity <securityGroupName>
+
+# MK Equipment
+Get-ADGroup -filter 'Name -like "_sec*"' 
+Get-ADGroup -filter 'Name -like "_sec*"' -Properties * | Select Name, Description

@@ -1,0 +1,2 @@
+# Check for SMB1
+Get-WindowsFeature FS-SMB1

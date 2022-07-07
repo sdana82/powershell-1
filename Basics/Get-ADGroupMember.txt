@@ -1,0 +1,5 @@
+Get-ADGroupMemeber -Identity <securityGroup>
+
+# MK Equipment
+Get-ADGroupMember -Identity _secAdminInvoice_mod
+Get-ADGroupMember -Identity _secAdminInvoice_mod | Select Name

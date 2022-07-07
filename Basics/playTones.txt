@@ -1,0 +1,6 @@
+[System.Console]::Beep(<frequency>,<duration>)
+
+
+[System.Console]::Beep(1000,300)
+[System.Console]::Beep(800,200)
+[System.Console]::Beep(1000,200)

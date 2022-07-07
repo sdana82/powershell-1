@@ -1,0 +1,17 @@
+Error:
+The term 'Get-ADUser' is not recognized as the name of a cmdlet, function, script file, or operable program.
+The term 'Get-ADGroupMember' is not recognized as the name of a cmdlet, function, script file, or operable program.
+
+Resolution
+Import-Module ActiveDirectory
+Verify Import: 
+Get-Module -ListAvailable
+
+
+
+Error:
+The term 'Get-GPO' is not recognized as the name of a cmdlet, function
+
+Resolution
+Import-Module -Name GroupPolicy
+Get-Module -ListAvailable

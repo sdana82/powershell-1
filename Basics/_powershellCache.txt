@@ -1,0 +1,13 @@
+# Get location of Cache
+(Get-PSReadlineOption).HistorySavePath
+
+# View Cache in PS window
+cat (Get-PSReadlineOption).HistorySavePath
+
+# Clear the Cache by deleting the file
+Remove-Item (Get-PSReadlineOption).HistorySavePath
+
+# Change how PS saves the commands
+Set-PSReadlineOption -HistorySaveStyle SaveIncrementally # default
+Set-PSReadlineOption -HistorySaveStyle SaveAtExit
+Set-PSReadlineOption -HistorySaveStyle SaveNothing

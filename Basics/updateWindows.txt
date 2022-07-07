@@ -1,0 +1,6 @@
+Install-Module PSWindowsUpdate
+Add-WUServiceManager -MicrosoftUpdate
+Get-WindowsUpdate
+Install-WindowsUpdate -MicrosoftUpdate -AcceptAll -AutoReboot
+
+Install-WindowsUpdate

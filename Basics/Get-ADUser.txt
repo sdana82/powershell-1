@@ -1,0 +1,81 @@
+# Find Active Users
+# Export to CSV File
+Get-ADUser -Filter * -SearchBase “CN=Users,dc=ad,dc=rengopackaging,dc=com” -ResultSetSize 5000 | Select Name,SamAccountName,Enabled | Export-Csv C:\CT-Temp\UserList-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+Get-ADUser -Filter * -SearchBase "OU=MyBusiness,dc=hydraairpacific,dc=com" -ResultSetSize 5000 | Select Name,SamAccountName,Enabled | Export-Csv C:\CT-Temp\UserList-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+Get-ADUser -Filter * -SearchBase "dc=hibiotech,dc=com" -ResultSetSize 5000 | Select Name,SamAccountName,Enabled | Export-Csv C:\CT-Temp\UserList-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+Get-ADUser -Filter * -SearchBase "dc=aec,dc=alohaeye,dc=com" | Select Name, SamAccountName,Enabled | Sort Name | Export-Csv C:\CT-Temp\aecUserList-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+
+Get-ADUser -Filter * -SearchBase "OU=DHMP Users,OU=Managed Users,dc=ASIC,dc=local" -ResultSetSize 5000 | Select Name,SamAccountName,Enabled | Export-Csv C:\CT-Temp\DHMP_userList-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv -NoTypeInformation
+Get-ADUser -Filter * -SearchBase "OU=NMPM Local,OU=Managed Users,dc=ASIC,dc=local" -ResultSetSize 5000 | Select Name,SamAccountName,Enabled | Export-Csv C:\CT-Temp\NMPM_userList-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv -NoTypeInformation
+
+Get-ADUser -Filter * -SearchBase "OU=NMPM Local,OU=Managed Users,dc=ASIC,dc=local" -ResultSetSize 5000 -Properties Name,Enabled,SamAccountName,ProfilePath | Select Name,Enabled,SamAccountName,ProfilePath | Out-GridView
+
+# Get All AD users
+Get-Aduser -filter * -properties Name, PasswordNeverExpires | where {$_.enabled -eq "true"} | Select Name, SamAccountName, DistinguishedName | Sort-Object Name | Out-GridView
+Get-Aduser -filter * -properties Name, PasswordNeverExpires | where {$_.enabled -eq "true"} | Select Name, SamAccountName, DistinguishedName | Sort-Object Name | Export-Csv C:\CT-Temp\userUserList-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+
+# Find Users without password expiration
+# Print to screen
+Get-Aduser -filter * -properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "true" } | where {$_.enabled -eq "true"}
+
+## Export to CSV Value
+Get-Aduser -filter * -properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "true" } | where {$_.enabled -eq "true"} | Select Name, SamAccountName, DistinguishedName | Sort-Object Name | Export-Csv C:\CT-Temp\userPassNoExpry-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+Get-Aduser -filter * -properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "true" } | where {$_.enabled -eq "true"} | Select Name, SamAccountName, DistinguishedName | Sort-Object Name | Out-GridView
+
+# Find Users with password Expiration
+Get-Aduser -filter * -properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "false" } | where {$_.enabled -eq "true"}
+Get-Aduser -filter * -properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "false" } | where {$_.enabled -eq "true"} | Out-GridView
+
+# Find users that cannot change their own password
+# Print to screen
+Get-Aduser -filter * -properties Name, CannotChangePassword | where { $_.CannotChangePassword -eq "true" } | where {$_.enabled -eq "true"} 
+
+# Export to CSV file
+Get-Aduser -filter * -properties Name, CannotChangePassword | where { $_.CannotChangePassword -eq "true" } | where {$_.enabled -eq "true"} | Select Name, SamAccountName, DistinguishedName | Sort-Object Name | Export-Csv C:\CT-Temp\userCantChangePassword-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+
+
+# Get user creation Date
+Get-AdUser <userName> -Properties whenCreated | Format-List Name, whenCreated
+Get-AdUser <userName> -Properties whenCreated | Format-List Name, whenCreated | Out-GridView
+Get-AdUser -Filter * -Properties whenCreated | where {$_.enabled -eq "true" } | Format-List Name, whenCreated | Sort Name
+
+# Get User info
+## to CSV
+Get-Aduser -Filter * -Properties *| Select name,SamAccountName,PasswordExpired,PasswordLastSet,LastLogonDate,Enabled,DistinguishedName,DisplayName,GivenName,SurName| Export-csv C:\CT-Temp\userInfo-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv -NoTypeInformation
+## Sorted to CSV
+Get-Aduser -Filter * -Properties *| Select name,SamAccountName,PasswordExpired,PasswordLastSet,LastLogonDate,passwordNeverExpires,Enabled,DistinguishedName,DisplayName,GivenName,SurName,whenCreated | Sort-Object -Property Name | Export-csv "C:\CT-Temp\userInfo-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv" -NoTypeInformation
+Get-Aduser -Filter * -Properties *| Select name,SamAccountName,PasswordExpired,PasswordLastSet,LastLogonDate,passwordNeverExpires,Enabled,DistinguishedName,DisplayName,GivenName,SurName,whenCreated | where {$_.enabled -eq "true" } | Sort-Object -Property Name | Export-csv "C:\CT-Temp\userInfo-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv" -NoTypeInformation
+## Sorted to GridView
+Get-Aduser -Filter * -Properties *| Select name,SamAccountName,PasswordExpired,PasswordLastSet,whenCreated,LastLogonDate,passwordNeverExpires,Enabled,DistinguishedName,DisplayName,GivenName,SurName | Sort-Object -Property Name | Out-GridView
+
+Get-Aduser -Filter * -Properties *| Select name,LastLogonDate,DisplayName,SamAccountName,PasswordExpired,PasswordLastSet,whenCreated,passwordNeverExpires,Enabled,DistinguishedName,GivenName,SurName | Sort-Object -Property LastLogonDate | where {$_.enabled -eq "true"} | Out-GridView
+
+# List Admins
+# Domain Admins
+Get-ADGroupMember -Identity "Domain Admins" -Recursive | %{Get-ADUser -Identity $_.distinguishedName} | Select Name, Enabled | Sort-Object Name | Export-Csv C:\CT-Temp\domainAdmins-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv
+Get-ADGroupMember -Identity "Domain Admins" -Recursive | %{Get-ADUser -Identity $_.distinguishedName} | Select Name, Enabled | Sort-Object Name | Out-GridView
+
+# Find users Home Directory
+Get-ADUser -Filter * -Properties Name, HomeDirectory | Select Name, SamAccountName, HomeDirectory
+Get-ADUser -Filter * -Properties Name, HomeDirectory | Select Name, SamAccountName, HomeDirectory | Out-GridView
+Get-ADUser -Filter { enabled -eq $True } -Properties Name, HomeDirectory | Select Name, SamAccountName, HomeDirectory | Sort Name | Out-GridView
+
+# Get username from Disply Name
+Get-ADUser -Filter "DisplayName -eq '<username>'" | Select Name, SamAccountName
+Get-ADUser -Filter "DisplayName -eq 'Andrew Lindstrom'" | Select SamAccountName
+
+# Get the date of the last password change
+Get-ADUser -Filter * -Properties PasswordLastSet, PasswordNeverExpires |ft Name, PasswordLastSet, Passwordneverexpires
+Get-ADUser -Filter * -Properties PasswordLastSet, PasswordNeverExpires | sort Name | ft Name, PasswordLastSet, Passwordneverexpires
+Get-ADUser -Filter * -Properties PasswordLastSet, PasswordNeverExpires | Sort-Object Name | Select-Object Name, PasswordLastSet, PasswordNeverExpires | Out-Gridview -Title "Password Last Set"
+Get-ADUser -Filter * -Properties PasswordLastSet, PasswordNeverExpires | Sort-Object Name | Select-Object Name, PasswordLastSet, PasswordNeverExpires | Export-csv -Path "C:\CT-Temp\userPasswordInfo-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv" -NoTypeInformation
+
+# Get disabled user info
+Get-ADUser -Filter {Enabled -eq $False} -Properties name,sAMAccountName,lastLogonDate | Where-Object {$_.lastLogonDate -le [DateTime]::Now.AddDays(-180)} | Select name,sAMAccountName,lastLogonDate | Sort-Object name
+Get-ADUser -Filter {Enabled -eq $False} -Properties name,sAMAccountName,lastLogonDate |  Select name,sAMAccountName,lastLogonDate | Sort-Object name
+
+# Get last login Date
+Get-ADUser -Identity “username” -Properties “LastLogonDate”
+Get-ADUser -Filter {Enabled -eq $True} -Properties name,sAMAccountName,lastLogonDate |  Select name,sAMAccountName,lastLogonDate | Sort-Object name | Export-CSV -Path "C:\CT-Temp\lastLogin-$(Get-Date -f 'yyyy.MM.dd_HHmm').csv" -NoTypeInformation
+
+

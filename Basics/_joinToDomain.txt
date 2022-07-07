@@ -1,0 +1,7 @@
+#CCH
+Add-Computer -DomainName TCCOH.LOCAL -Credential TCCOH\ctadmin -OUPath "OU=Liliha,DC=TCCOH,DC=LOCAL" -Restart -Force
+
+# Join Aloha Security (from Tunnel)
+$interfaceIndex = (Get-NetAdapter | Where { ($_.Status -eq "Up") } | Select InterfaceIndex | FT -HideTableHeaders |  Out-String).trim()
+set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("172.16.0.51")
+Add-Computer –DomainName ASIC.LOCAL -Credential ASIC\ctadmin -restart –force

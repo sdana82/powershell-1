@@ -1,0 +1,18 @@
+# Add to Domain
+# Add-Computer -DomainName "YourDomainName" -Restart
+
+# Add to Workgroup
+# Add-Computer -WorkgroupName "WORKGROUP" -Restart
+
+# Add to Domain (on network)
+# Add-Computer -DomainName "DomainName" -Server "DOMAIN\Server" -PassThru -Verbose -Restart
+
+# Add to Domain (on network) to specfic OU
+# Use Get-ADOrganizationalUnit -Filter 'Name -like "*"' | Format-Table Name, DistinguishedName -A to find the OU if needed
+# Add-Computer -DomainName "DomainName" -Server "DOMAIN\Server" -OUPath ""
+
+# PRO/TCCOH
+Add-Computer -DomainName "TCCOH.LOCAL" -OUPath "OU=PRO_Computers,DC=tccoh,DC=local" -Restart
+
+# TCCOH
+Add-Computer -DomainName "TCCOH.LOCAL" -OUPath "OU=Dosimetry,OU=liliha,DC=tccoh,DC=local" -Restart

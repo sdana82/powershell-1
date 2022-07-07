@@ -1,0 +1,4 @@
+Get-netTCPConnection
+
+# Working
+Get-NetTCPConnection | ? {$_.STate -eq "Listen"} | Select RemoteAddress, LocalPort, OwningProcess, State | Out-GridView

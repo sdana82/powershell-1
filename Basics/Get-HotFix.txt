@@ -1,0 +1,5 @@
+Get-HotFix
+
+Get-HotFix | Export-Csv C:\CT-Temp\get-hotfix.csv
+
+Get-HotFix | Export-Csv C:\CT-Temp\get-hotfix.csv

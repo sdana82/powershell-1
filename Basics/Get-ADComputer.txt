@@ -1,0 +1,24 @@
+# List all Computers in AD
+Get-ADComputer -Filter *
+
+# List computers in Computers OU
+Get-ADComputer -Filter * -SearchBase "CN=Computers, DC=contoso, DC=com"
+
+# List Computer info
+Get-ADComputer -Identity <computerName>
+
+# Island Pool Supply
+Get-ADComputer -Filter * -SearchBase "CN=Computers, DC=islandpool, DC=local" | Select Name | Export-CSV "C:\CT-Temp\computerList_$((Get-Date).ToString("yyyyMMdd_HHmm")).csv"
+
+# CCH
+## Get Pali Momi Computers
+C:\Users\ctadmin.TCCOH> Get-AdComputer -Filter * | Where-Object {$_.Name -Like "*Pali*"} | Select Name | Sort Name | Out-GridView
+C:\Users\ctadmin.TCCOH> Get-AdComputer -Filter * | Where-Object {$_.Name -Like "*Pali*"} | Select Name | Sort Name | Export-CSV "C:\CT-Temp\computerList_PaliMomi_$((Get-Date).ToString("yyyyMMdd_HHmm")).csv"
+
+# Get Last logon date for computers
+Get-ADComputer -Filter * -Properties * | FT Name, LastLogonDate -Autosize
+Get-ADComputer -Filter * -Properties * | Select Name, LastLogonDate | Sort Name
+Get-ADComputer -Filter * -Properties * | Select Name, LastLogonDate | Out-GridView
+Get-ADComputer -Filter * -Properties * -SearchBase "CN=Computers, DC=Cetra, DC=local" | Select Name, LastLogonDate | Out-GridView
+Get-ADComputer -Filter * -Properties * | Select Name, LastLogonDate | Sort Name | Export-CSV "C:\CT-Temp\computerList_$((Get-Date).ToString("yyyyMMdd_HHmm")).csv" -NoTypeInformation
+Get-ADComputer -Filter * -Properties * | Sort LastLogon | Select Name, LastLogonDate,@{Name='LastLogon';Expression={[DateTime]::FromFileTime($_.LastLogon)}} | Export-CSV "C:\CT-Temp\computerList_$((Get-Date).ToString("yyyyMMdd_HHmm")).csv" -NoTypeInformation

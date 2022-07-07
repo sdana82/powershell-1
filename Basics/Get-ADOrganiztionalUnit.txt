@@ -1,0 +1,2 @@
+# Get all OU's from domain
+Get-ADOrganizationalUnit -Filter 'Name -like "*"' | Format-Table Name, DistinguishedName -A

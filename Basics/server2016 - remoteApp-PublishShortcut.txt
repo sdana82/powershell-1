@@ -1,0 +1,3 @@
+New-RDRemoteApp -Alias "AbacusLaw" -CollectionName OpenText -DisplayName "AbacusLaw" -FilePath "C:\Users\Public\Desktop\AbacusLaw.lnk" -IconPath "\\RS-FS01\AbacusLaw\v23\Programs\lawwin.exe"
+New-RDRemoteApp -Alias "AbacusAccounting" -CollectionName OpenText -DisplayName "Abacus Accounting" -FilePath "C:\Users\Public\Desktop\Abacus Accounting.lnk" -IconPath "\\RS-FS01\AbacusLaw\v23\Programs\AbacusA.exe"
+New-RDRemoteApp -Alias "AbacusMessaging" -CollectionName OpenText -DisplayName "Message Slips" -FilePath "C:\Users\Public\Desktop\Abacus Accounting.lnk" -IconPath "\\RS-FS01\AbacusLaw\v23\Programs\Msgs.exe"
