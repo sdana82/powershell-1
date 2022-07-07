@@ -1,0 +1,4 @@
+# Export to CSV
+
+# Example: <command> | Export-Csv c:\CT-Temp\<fileName>-$(Get-Date -f 'yyyy.MM.dd-HHmm').csv -notypeinformation
+<command> | Export-Csv c:\CT-Temp\mailbox-noFilter-$(Get-Date -f 'yyyy.MM.dd-HHmm').csv -notypeinformation
